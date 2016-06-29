@@ -173,18 +173,18 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
                         // If ipfs add succeed
                         let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)!
                         let ipfsAddResponse = Mapper<IpfsAddResponse>().map(dataString)
+                        let relativePath = self.navigationManager?.buildPath(filePath.lastPathComponent!)
                         
                         // TODO: handle error
-						let file = self.fileManager?.createFile(filePath.relativePath!, metadata: "", IPFSHash: ipfsAddResponse!.hash)
-                        
-                        //let file = File(path: filePath.relativePath!, metadata: "", IPFSHash: ipfsAddResponse!.hash, isDir: false, files: [:])
-                        
-                        print(filePath.relativePath!)
-                        print(file?.isDir)
+						let file = self.fileManager?.createFile(relativePath!, metadata: "", IPFSHash: ipfsAddResponse!.hash)
                         
                         // add new file in tree after add request
                         self.networkManager?.fadd([file!]) { _ in
                             self.navigationManager?.insertFileObject(file!)
+                            
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.list.reloadData()
+                            }
                         }
                     }
                 }

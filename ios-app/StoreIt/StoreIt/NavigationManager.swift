@@ -44,6 +44,17 @@ class NavigationManager {
         return false
     }
 
+    func buildPath(fileName: String) -> String {
+        var path = "/"
+        
+        if (indexes.isEmpty) {
+            return path + fileName
+        }
+        
+        path += "\(self.indexes.joinWithSeparator("/"))/\(fileName)"
+        return path
+    }
+    
     func getFileObjectAtIndex() -> [String: File] {
         let cpyIndexes = self.indexes
         var cpyStoreItSynchDir: [String: File] = self.storeItSynchDir

@@ -145,6 +145,10 @@ export const disconnectSocket = (client) => {
 
   const user = sockets[client.uid]
 
+  if (user === undefined) {
+    return logger.debug('client is already disconnected')
+  }
+
   delete user.sockets[client.uid]
 
   if (Object.keys(user.sockets).length === 0) {

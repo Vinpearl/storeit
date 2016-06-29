@@ -22,15 +22,23 @@ const get = (hash, file, handlerFn) => {
       return co(() => get(hash, file, handlerFn))
     }
 
-    const data = []
+    let data = []
 
     res.on("data", (chunk) => {
       data.push(chunk)
     })
 
     res.on("end", () => {
-      fs.writeFile(file, Buffer.concat(data), null, (err) => {
-        console.log(err)
+      data = Buffer.concat(data)
+      fs.writeFile(file, data, null, (err) => {
+        if (err) {
+          return console.log(err)
+        }
+        node.add(file, (err) => {
+          if (err) {
+            console.log(err)
+          }
+        })
       })
     })
   })

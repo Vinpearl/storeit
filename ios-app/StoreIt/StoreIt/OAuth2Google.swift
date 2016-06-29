@@ -50,7 +50,7 @@ class OAuth2Google : OAuth2 {
                 usleep(1)
             }
             
-            loginView.networkManager?.join("gg", accessToken: self.oauth2.accessToken!)
+            loginView.networkManager?.join("gg", accessToken: self.oauth2.accessToken!, completion: nil)
             loginView.performSegueWithIdentifier("StoreItSynchDirSegue", sender: nil)
         }
         oauth2.onFailure = { error in

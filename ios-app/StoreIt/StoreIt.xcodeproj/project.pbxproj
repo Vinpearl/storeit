@@ -35,6 +35,7 @@
 		857987301CDCBE300062B8F8 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8579872F1CDCBE300062B8F8 /* OAuth2.swift */; };
 		857987321CDCBE4D0062B8F8 /* OAuth2Google.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857987311CDCBE4D0062B8F8 /* OAuth2Google.swift */; };
 		857D8ED01D1A90D100166738 /* ConnectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857D8ECF1D1A90D100166738 /* ConnectionType.swift */; };
+		858B096E1D23D9D400CB1190 /* IpfsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858B096D1D23D9D400CB1190 /* IpfsResponse.swift */; };
 		8596DF0C1CDBDC03008501BD /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8596DF0B1CDBDC03008501BD /* ConnectionManager.swift */; };
 		85B154121D140D18003B62FE /* PListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B154111D140D18003B62FE /* PListManager.swift */; };
 		85BA025B1CEDBD7200A8FC6F /* NavigationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BA025A1CEDBD7200A8FC6F /* NavigationManager.swift */; };
@@ -104,6 +105,7 @@
 		8579872F1CDCBE300062B8F8 /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
 		857987311CDCBE4D0062B8F8 /* OAuth2Google.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2Google.swift; sourceTree = "<group>"; };
 		857D8ECF1D1A90D100166738 /* ConnectionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionType.swift; sourceTree = "<group>"; };
+		858B096D1D23D9D400CB1190 /* IpfsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IpfsResponse.swift; sourceTree = "<group>"; };
 		8596DF0B1CDBDC03008501BD /* ConnectionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		85B154111D140D18003B62FE /* PListManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PListManager.swift; sourceTree = "<group>"; };
 		85BA025A1CEDBD7200A8FC6F /* NavigationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationManager.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				8500F70D1C97112800C69875 /* FileManager.swift */,
 				85BA025A1CEDBD7200A8FC6F /* NavigationManager.swift */,
 				85D0E60F1D1D985E00C564C3 /* IpfsManager.swift */,
+				858B096D1D23D9D400CB1190 /* IpfsResponse.swift */,
 			);
 			name = FileManagement;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				85708E821D130ED5001B7415 /* ParametersView.swift in Sources */,
 				855AFB2F1D15CCC6009B81D9 /* CommandInfos.swift in Sources */,
 				85708E861D131D21001B7415 /* ProfileView.swift in Sources */,
+				858B096E1D23D9D400CB1190 /* IpfsResponse.swift in Sources */,
 				855AFB2D1D15CAB4009B81D9 /* Command.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

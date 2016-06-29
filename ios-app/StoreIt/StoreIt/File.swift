@@ -29,7 +29,7 @@ class File: Mappable {
         self.path = path
         self.metadata = metadata
         self.IPFSHash = IPFSHash
-        self.isDir = true
+        self.isDir = isDir
         self.files = files
     }
     

@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import ObjectMapper
 
 // TODO: maybe import interface texts from a file for different languages ?
 
@@ -52,7 +53,7 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             while ((self.navigationManager?.items)! == []) {
    				print("Waiting data to reaload view...")
-                sleep(1)
+                usleep(1)
             }
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -133,7 +134,6 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
     }
     
     func createItemCellAtIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
-        
         let isDir: Bool = (self.navigationManager?.isSelectedFileAtRowADir(indexPath))!
         let items: [String] = (self.navigationManager?.items)!
         
@@ -160,11 +160,33 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
                 if info!.keys.contains(NSString(string: "PHImageFileURLKey"))
                 {
                     let filePath = info![NSString(string: "PHImageFileURLKey")] as! NSURL
-                    let fileName = filePath.lastPathComponent!
                     
-                    print(fileName)
-                    
-                    // IPFS ADD HERE
+                    self.ipfsManager?.add(filePath) {
+                        (
+                        let data, let response, let error) in
+                        
+                        guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
+                            print("[IPFS.ADD] Error while IPFS ADD")
+                            return
+                        }
+                        
+                        // If ipfs add succeed
+                        let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+                        let ipfsAddResponse = Mapper<IpfsAddResponse>().map(dataString)
+                        
+                        // TODO: handle error
+						let file = self.fileManager?.createFile(filePath.relativePath!, metadata: "", IPFSHash: ipfsAddResponse!.hash)
+                        
+                        //let file = File(path: filePath.relativePath!, metadata: "", IPFSHash: ipfsAddResponse!.hash, isDir: false, files: [:])
+                        
+                        print(filePath.relativePath!)
+                        print(file?.isDir)
+                        
+                        // add new file in tree after add request
+                        self.networkManager?.fadd([file!]) { _ in
+                            self.navigationManager?.insertFileObject(file!)
+                        }
+                    }
                 }
             })
         });

@@ -10,8 +10,6 @@ import UIKit
 import ObjectMapper
 import FBSDKLoginKit
 
-// TODO: try to merged initGoogle and initFacebook
-
 class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     
     var connectionType: ConnectionType? = nil
@@ -22,7 +20,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     var ipfsManager: IpfsManager? = nil
     var plistManager: PListManager? = nil
 
-    let port: Int = 7641
+    let port: Int = 7641//8001
     let host: String = "localhost"
     
     @IBOutlet weak var FBLoginButton: FBSDKLoginButton!
@@ -132,13 +130,13 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     func initFacebook() {
         self.initConnection(self.host, port: self.port, path: "/Users/gjura_r/Desktop/demo/", allItems: [:])
         self.connectionType = ConnectionType.FACEBOOK
-        self.plistManager?.addValueForKey("connextionType", value: ConnectionType.FACEBOOK.rawValue)
+        self.plistManager?.addValueForKey("connectionType", value: ConnectionType.FACEBOOK.rawValue)
         
         while (self.networkManager?.isConnected() == false) {
             usleep(1)
         }
         
-        self.networkManager?.join("fb", accessToken: FBSDKAccessToken.currentAccessToken().tokenString!)
+        self.networkManager?.join("fb", accessToken: FBSDKAccessToken.currentAccessToken().tokenString!, completion: nil)
         self.performSegueWithIdentifier("StoreItSynchDirSegue", sender: nil)
     }
     

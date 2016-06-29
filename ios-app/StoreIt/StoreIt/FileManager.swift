@@ -44,13 +44,13 @@ class FileManager {
         return dir
     }
     
-    func createFile(path: String, metadata: String, IPFSHash: String, files: [String:File]? = nil) -> File {
-        let dir = File(path: path,
+    func createFile(path: String, metadata: String, IPFSHash: String) -> File {
+        let file = File(path: path,
                        metadata: metadata,
                        IPFSHash: IPFSHash,
                        isDir: false,
                        files: [:])
-        return dir
+        return file
     }
     
     // Build recursively the tree of the root directory into a dictionnary

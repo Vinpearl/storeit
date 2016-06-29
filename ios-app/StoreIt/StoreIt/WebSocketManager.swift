@@ -34,7 +34,7 @@ class WebSocketManager {
         	print("[Client.WebSocketManager] Websocket is disconnected from \(self.url) with error: \(error?.localizedDescription)")
             self.logoutFunction()
         }
-        
+                
         self.ws.onText = { (request: String) in
             print("[Client.WebSocketManager] Client recieved a request : \(request)")
 			
@@ -76,10 +76,10 @@ class WebSocketManager {
         self.ws.connect()
     }
     
-    func sendRequest(request: String) {
+    func sendRequest(request: String, completion: (() -> ())?) {
         if (self.ws.isConnected) {
             print("[WSManager] request is sending... : \(request)")
-            self.ws.writeString(request)
+            self.ws.writeString(request, completion: completion)
         } else {
             print("[Client.WebSocketManager] Client can't send request \(request) to \(url), WS is disconnected")
         }

@@ -34,27 +34,14 @@ class IpfsManager {
         }
         catch let err as NSError { print("[IPFS.GET] error: \(err)") }
     }
-
-    /*let task = session.dataTaskWithRequest(request) {
-        (
-        let data, let response, let error) in
-        
-        guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
-            print("error")
-            return
-        }
-        
-        let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-        print(dataString)
-        
-    }*/
     
-    func add(filePath: String, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) {
+    func add(filePath: NSURL, completionHandler: (NSData?, NSURLResponse?, NSError?) -> Void) {
         let CRLF = "\r\n"
         let boundary = self.generateBoundaryString()
         
-        let data = NSData(contentsOfFile: filePath)
-        let fileName = NSURL(fileURLWithPath: filePath).lastPathComponent!
+        let data = NSData(contentsOfURL: filePath)
+        let fileName = filePath.lastPathComponent!
+        //let fileName = NSURL(fileURLWithPath: filePath).lastPathComponent!
         
         let url = NSURL(string: "\(host):\(port)/api/v0/add?stream-cannels=true")
         let request = NSMutableURLRequest(URL: url!)

@@ -1,4 +1,5 @@
 import ipfs from 'ipfs-api'
+import * as usr from './user-file.js'
 import * as fs from 'fs'
 
 let node = null
@@ -16,6 +17,8 @@ const co = (onCo) => {
 co()
 
 const get = (hash, file, handlerFn) => {
+
+  file = usr.storeDir + '/' + file
 
   node.cat(hash, (err, res) => {
     if (err) {
@@ -43,5 +46,3 @@ const get = (hash, file, handlerFn) => {
     })
   })
 }
-
-get('QmaWiFWgMw88fS7r1z4djpyDAUM5SRJhFY7v2SFcUHjbVF', 'haha.jpg')

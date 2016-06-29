@@ -14,40 +14,33 @@ const join = function(command, arg, socket, handlerFn) {
 
   // TODO: error checking on JSON
   auth.verifyUserToken(arg.authType, arg.accessToken, (err, email) => {
-    if (!err && email !== undefined) {
-      user.connectUser(email, socket, (err, usr) => {
-        if (err && err.errno === -2) {
-          user.createUser(email, (err) => {
-            if (err) {
-              handlerFn(err)
-            }
-            else {
-              user.connectUser(email, socket, (err, usrAgain) => {
-                if (err) {
-                  handlerFn({code: 2, msg: 'could not connect user'})
-                }
-                else {
-                  sendWelcome(socket, usrAgain, command.uid, handlerFn)
-                }
-              })
-            }
-          })
-        }
-        else if (err) {
-          logger.debug('could not connect user')
-          handlerFn({code: 1, msg: 'bad credentials'})
-        }
-        else {
-          sendWelcome(socket, usr, command.uid, handlerFn)
-        }
-      })
-    }
-    else {
-      logger.debug('could not connect user')
-      handlerFn({code: 1, msg: 'bad credentials'})
-    }
-  })
 
+    if (err) {
+      return handlerFn(err)
+    }
+
+    user.connectUser(email, socket, (err, usr) => {
+      if (err && err.errno === -2) {
+        user.createUser(email, (err) => {
+          if (err) {
+            return handlerFn(protoObjs.Error.SERVERERROR)
+          }
+          user.connectUser(email, socket, (err, usrAgain) => {
+            if (err) {
+              return handlerFn(protoObjs.Error.SERVERERROR)
+            }
+            sendWelcome(socket, usrAgain, command.uid, handlerFn)
+          })
+        })
+      }
+      else if (err) {
+        return handlerFn(err)
+      }
+      else {
+        sendWelcome(socket, usr, command.uid, handlerFn)
+      }
+    })
+  })
 }
 
 const recast = (command, client) => {
@@ -101,6 +94,7 @@ export const parse = function(msg, client) {
   // TODO: catch the goddam exception
   hmap[command.command](command, command.parameters, client, (err) => {
     if (err) {
+      logger.debug('sending failure response: ' + err)
       client.answerFailure(command.uid, err)
     }
   })

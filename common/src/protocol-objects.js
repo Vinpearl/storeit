@@ -1,5 +1,12 @@
 let uid = 0
 
+export const Error = {
+  BADCREDENTIALS: {code: 1, msg: 'Invalid credentials'},
+  BADSCOPE: {code: 2, msg: 'Bad OAuth scope'},
+  UNKNOWNAUTHTYPE: {code: 3, msg: 'Unknown authentication method'},
+  SERVERERROR: {code: 4, msg: 'The server failed'},
+}
+
 export class Command {
 
   constructor(name, parameters) {

@@ -1,44 +1,41 @@
 import {oauth2} from 'googleapis'
-import * as https from 'https'
+import request from 'request'
+import * as protocol from './protocol-objects.js'
 
 const oauth = oauth2('v2')
 
 export const verifyUserToken = (authService, accessToken, handlerFn) => {
+
   if (accessToken === 'developer') {
-    handlerFn(null, 'adrien.morel@me.com')
+    return handlerFn(null, 'adrien.morel@me.com')
+  }
+  if (authService === 'gg') {
+    return oauth.userinfo.get({'access_token': accessToken}, (err, response) => {
+      if (err) {
+        return handlerFn(protocol.Error.BADCREDENTIALS)
+      }
+
+      if (response.email === undefined) {
+        return handlerFn(protocol.Error.BADSCOPE)
+      }
+      return handlerFn(null, response.email)
+    })
+  }
+  else if (authService === 'fb') {
+    return request('https://graph.facebook.com/me?access_token=' + accessToken + '&fields=email', (err, response, body) => {
+
+      if (response.statusCode !== 200) {
+        return handlerFn(protocol.Error.SERVERERROR)
+      }
+
+      const parsed = JSON.parse(body)
+      if (parsed.email === undefined) {
+        return handlerFn(protocol.Error.BADSCOPE)
+      }
+      handlerFn(null, parsed.email)
+    })
   }
   else {
-    if (authService === 'gg') {
-      oauth.userinfo.get({'access_token': accessToken}, (err, response) => {
-        handlerFn(err, err ? null : response.mail)
-      })
-    }
-    else if (authService === 'fb') {
-      https.get({
-        host: 'graph.facebook.com',
-        path: '/me?access_token=' + accessToken + '&fields=email'
-      }, (response) => {
-
-        // Continuously update stream with data
-        let body = ''
-        response.on('data', (d) => {
-          body += d
-        })
-
-        response.on('end', () => {
-
-          try {
-            const parsed = JSON.parse(body)
-            handlerFn(parsed.email === undefined ? 'invalid' : null, parsed.email)
-          }
-          catch (e) {
-            handlerFn(e)
-          }
-        })
-      })
-    }
-    else {
-      handlerFn(true, undefined)
-    }
+    handlerFn(protocol.Error.UNKNOWNAUTHTYPE, undefined)
   }
 }

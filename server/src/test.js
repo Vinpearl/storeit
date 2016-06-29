@@ -63,6 +63,14 @@ const expectErrorResponse = (data) => {
 let fakeA = undefined
 let fakeB = undefined
 
+/*
+describe('OAuth login/registering', () => {
+  it('should connect with google', () => {
+    fakeGoogle = new fakeUser()
+  })
+})
+*/
+
 describe('simple connection', () => {
 
   it('should get JOIN response', (done) => {

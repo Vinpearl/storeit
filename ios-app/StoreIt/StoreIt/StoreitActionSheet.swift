@@ -8,16 +8,16 @@
 
 import UIKit
 
-class UploadActionSheet {
+class StoreitActionSheet {
     
-    let uploadActionSheet: UIAlertController
+    let storeitActionSheet: UIAlertController
     
     init(title: String, message: String?) {
-        self.uploadActionSheet = UIAlertController(title: title, message: message, preferredStyle: .ActionSheet)
+        self.storeitActionSheet = UIAlertController(title: title, message: message, preferredStyle: .ActionSheet)
     }
     
     func addActionToUploadActionSheet(title: String, style: UIAlertActionStyle, handler: ((UIAlertAction) -> Void)?) {
         let newAction: UIAlertAction = UIAlertAction(title: title, style: style, handler: handler)
-        self.uploadActionSheet.addAction(newAction)
+        self.storeitActionSheet.addAction(newAction)
     }
 }

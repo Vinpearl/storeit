@@ -17,7 +17,7 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
     
     @IBOutlet weak var list: UITableView!
     
-    var uploadActionSheet: UploadActionSheet?
+    var storeitActionSheet: StoreitActionSheet?
     
     var connectionType: ConnectionType? = nil
     var networkManager: NetworkManager? = nil
@@ -47,7 +47,7 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
             self.navigationItem.hidesBackButton = false
         }
         
-        self.uploadActionSheet = UploadActionSheet(title: "Importer un fichier", message: nil)
+        self.storeitActionSheet = StoreitActionSheet(title: "Choisissez une option", message: nil)
         self.addActionsToActionSheet()
         
         // TODO: show some loading in interface
@@ -192,6 +192,32 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
         });
     }
     
+    func createNewDirectory(action: UIAlertAction) -> Void {
+        let alert = UIAlertController(title: "Création de dossier", message: "Entrez le nom du dossier", preferredStyle: .Alert)
+        
+        alert.addTextFieldWithConfigurationHandler(nil)
+        
+        alert.addAction(UIAlertAction(title: "Annuler", style: .Cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+            let input = alert.textFields![0] as UITextField
+
+        	// TODO: check input
+            
+            let relativePath = self.navigationManager?.buildPath(input.text!)
+            let newDirectory: File = self.fileManager!.createDir(relativePath!, metadata: "", IPFSHash: "")
+            
+            self.networkManager?.fadd([newDirectory]) { _ in
+                self.navigationManager?.insertFileObject(newDirectory)
+                
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.list.reloadData()
+            	}
+            }
+        }))
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     func pickImageFromLibrary(action: UIAlertAction) -> Void {
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary)) {
             let imagePicker = UIImagePickerController()
@@ -218,12 +244,13 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
     }
     
     func addActionsToActionSheet() {
-        self.uploadActionSheet!.addActionToUploadActionSheet("Annuler", style: .Cancel, handler: nil)
-        self.uploadActionSheet!.addActionToUploadActionSheet("Depuis mes photos et vidéos", style: .Default, handler: pickImageFromLibrary)
-        self.uploadActionSheet!.addActionToUploadActionSheet("Depuis l'appareil photo", style: .Default, handler: takeImageWithCamera)
+        self.storeitActionSheet!.addActionToUploadActionSheet("Annuler", style: .Cancel, handler: nil)
+        self.storeitActionSheet!.addActionToUploadActionSheet("Créer un dossier", style: .Default, handler: createNewDirectory)
+        self.storeitActionSheet!.addActionToUploadActionSheet("Importer depuis mes photos et vidéos", style: .Default, handler: pickImageFromLibrary)
+        self.storeitActionSheet!.addActionToUploadActionSheet("Prendre avec l'appareil photo", style: .Default, handler: takeImageWithCamera)
     }
     
     func uploadOptions() {
-        self.presentViewController(self.uploadActionSheet!.uploadActionSheet, animated: true, completion: nil)
+        self.presentViewController(self.storeitActionSheet!.storeitActionSheet, animated: true, completion: nil)
     }
 }

@@ -9,14 +9,15 @@
 import UIKit
 import Photos
 import ObjectMapper
+import PreviewTransition
 
 // TODO: maybe import interface texts from a file for different languages ?
 
-class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var list: UITableView!
     
-    var alertControllerManager: AlertControllerManager?
+    var uploadActionSheet: UploadActionSheet?
     
     var connectionType: ConnectionType? = nil
     var networkManager: NetworkManager? = nil
@@ -46,14 +47,14 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
             self.navigationItem.hidesBackButton = false
         }
         
-        self.alertControllerManager = AlertControllerManager(title: "Importer un fichier", message: nil)
+        self.uploadActionSheet = UploadActionSheet(title: "Importer un fichier", message: nil)
         self.addActionsToActionSheet()
         
         // TODO: show some loading in interface
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             while ((self.navigationManager?.items)! == []) {
-   				print("Waiting data to reaload view...")
-                usleep(1)
+   				//print("Waiting data to reaload view...")
+                usleep(10)
             }
             
             dispatch_async(dispatch_get_main_queue()) {
@@ -99,21 +100,20 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
             listView.navigationManager = self.navigationManager
         }
         else if (segue.identifier == "showFileSegue") {
-            let fileView = segue.destinationViewController
+            let fileView = segue.destinationViewController as! FileView
+            fileView.navigationItem.title = self.navigationManager?.getTargetName(target!)
 
-            self.ipfsManager?.get((target?.IPFSHash)!) { data in
-                print("[IPFS.GET] received data: \(data)")
-                // Set file preview on next view here
-                // Refresh
+            self.ipfsManager?.get(target!.IPFSHash) { data in
+                //print("[IPFS.GET] received data: \(data)")
+                fileView.data = data
             }
             
-            fileView.navigationItem.title = self.navigationManager?.getTargetName(target!)
         }
     }
 
 	// MARK: Creation and management of table cells
     
-   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (self.navigationManager?.items.count)!
     }
     
@@ -166,7 +166,7 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
                         let data, let response, let error) in
                         
                         guard let _:NSData = data, let _:NSURLResponse = response  where error == nil else {
-                            print("[IPFS.ADD] Error while IPFS ADD")
+                            print("[IPFS.ADD] Error while IPFS ADD: \(error)")
                             return
                         }
                         
@@ -218,12 +218,12 @@ class StoreItSynchDirectoryView: UIViewController, UITableViewDelegate, UITableV
     }
     
     func addActionsToActionSheet() {
-        self.alertControllerManager!.addActionToUploadActionSheet("Annuler", style: .Cancel, handler: nil)
-        self.alertControllerManager!.addActionToUploadActionSheet("Depuis mes photos et vidéos", style: .Default, handler: pickImageFromLibrary)
-        self.alertControllerManager!.addActionToUploadActionSheet("Depuis l'appareil photo", style: .Default, handler: takeImageWithCamera)
+        self.uploadActionSheet!.addActionToUploadActionSheet("Annuler", style: .Cancel, handler: nil)
+        self.uploadActionSheet!.addActionToUploadActionSheet("Depuis mes photos et vidéos", style: .Default, handler: pickImageFromLibrary)
+        self.uploadActionSheet!.addActionToUploadActionSheet("Depuis l'appareil photo", style: .Default, handler: takeImageWithCamera)
     }
     
     func uploadOptions() {
-        self.presentViewController(self.alertControllerManager!.uploadActionSheet, animated: true, completion: nil)
+        self.presentViewController(self.uploadActionSheet!.uploadActionSheet, animated: true, completion: nil)
     }
 }

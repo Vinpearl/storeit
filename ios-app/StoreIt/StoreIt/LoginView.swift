@@ -58,7 +58,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
         let listView = navigationController.viewControllers[0] as! StoreItSynchDirectoryView
         
         listView.navigationItem.title = self.navigationManager?.rootDirTitle
-        
+
         listView.connectionType = self.connectionType
         listView.networkManager = self.networkManager
         listView.connectionManager = self.connectionManager
@@ -116,7 +116,7 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
         }
         
         if (self.ipfsManager == nil) {
-            self.ipfsManager = IpfsManager(host: "http://127.0.0.1", port: 5001)
+            self.ipfsManager = IpfsManager(host: "127.0.0.1", port: 5001)
         }
     }
     

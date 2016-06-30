@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlertControllerManager {
+class UploadActionSheet {
     
     let uploadActionSheet: UIAlertController
     

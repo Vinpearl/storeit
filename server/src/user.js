@@ -105,6 +105,10 @@ export class User {
       handlerFn(err, obj)
     })
   }
+
+  flushHome() {
+    fs.writeFile(usersDir + this.email, JSON.stringify(this.home, null, 2))
+  }
 }
 
 export const users = {}
@@ -131,6 +135,8 @@ export const disconnectSocket = (client) => {
   }
 
   delete user.sockets[client.uid]
+
+  user.flushHome()
 
   if (Object.keys(user.sockets).length === 0) {
     delete users[user.email]

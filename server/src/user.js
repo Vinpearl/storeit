@@ -95,7 +95,13 @@ export class User {
 
   delTree(paths) {
     for (const p of paths) {
-      tree.setTree(this.home, p, (tree, name) => delete tree.files[name])
+      if (typeof p !== 'string') {
+        // TODO: send error response
+        logger.debug('client sent bad request')
+      }
+      else {
+        tree.setTree(this.home, p, (tree, name) => delete tree.files[name])
+      }
     }
   }
 

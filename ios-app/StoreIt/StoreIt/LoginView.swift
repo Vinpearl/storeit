@@ -98,6 +98,22 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
         self.logout()
     }
     
+    func loginFunction() {
+        let connectionType = self.connectionType?.rawValue
+        
+        let accessToken: String? = connectionType.map { type in
+            if (type == ConnectionType.GOOGLE.rawValue) {
+                return (self.connectionManager?.oauth2?.accessToken())!
+            } else {
+                return FBSDKAccessToken.currentAccessToken().tokenString
+            }
+        }
+        
+        self.networkManager?.join(connectionType!, accessToken: accessToken!) { _ in
+			//
+        }
+    }
+    
     @IBAction func logoutSegue(segue: UIStoryboardSegue) {
 		self.logout()
     }
@@ -112,12 +128,14 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
         }
         
         if (self.networkManager == nil) {
-            self.networkManager = NetworkManager(host: host, port: port, navigationManager: self.navigationManager!, logoutFunction: logoutToLoginView)
+            self.networkManager = NetworkManager(host: host, port: port, navigationManager: self.navigationManager!)
         }
         
         if (self.ipfsManager == nil) {
             self.ipfsManager = IpfsManager(host: "127.0.0.1", port: 5001)
         }
+    	
+        self.networkManager?.initConnection(self.loginFunction, logoutFunction: self.logoutToLoginView)
     }
     
     // MARK: Login with Facebook
@@ -128,15 +146,10 @@ class LoginView: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func initFacebook() {
-        self.initConnection(self.host, port: self.port, path: "/Users/gjura_r/Desktop/demo/", allItems: [:])
         self.connectionType = ConnectionType.FACEBOOK
         self.plistManager?.addValueForKey("connectionType", value: ConnectionType.FACEBOOK.rawValue)
         
-        while (self.networkManager?.isConnected() == false) {
-            usleep(1)
-        }
-        
-        self.networkManager?.join("fb", accessToken: FBSDKAccessToken.currentAccessToken().tokenString!, completion: nil)
+        self.initConnection(self.host, port: self.port, path: "/Users/gjura_r/Desktop/demo/", allItems: [:])
         self.performSegueWithIdentifier("StoreItSynchDirSegue", sender: nil)
     }
     

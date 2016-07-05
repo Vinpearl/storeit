@@ -41,7 +41,6 @@ class IpfsManager {
         
         let data = NSData(contentsOfURL: filePath)
         let fileName = filePath.lastPathComponent!
-        //let fileName = NSURL(fileURLWithPath: filePath).lastPathComponent!
         
         let url = NSURL(string: "http://\(host):\(port)/api/v0/add?stream-cannels=true")
         let request = NSMutableURLRequest(URL: url!)

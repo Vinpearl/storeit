@@ -15,29 +15,27 @@ class WebSocketManager {
     let url: NSURL
     let ws: WebSocket
     let navigationManager: NavigationManager
-    let logoutFunction: () -> Void
     
-    init(host: String, port: Int, navigationManager: NavigationManager, logoutFunction: () -> Void) {
+    init(host: String, port: Int, navigationManager: NavigationManager) {
         self.url = NSURL(string: "ws://\(host):\(port)/")!
         self.ws = WebSocket(url: url)
         self.navigationManager = navigationManager
-        self.logoutFunction = logoutFunction
-        self.eventsInitializer()
     }
     
-    private func eventsInitializer() {
+    func eventsInitializer(loginFunction: () -> Void, logoutFunction: () -> Void) {
         self.ws.onConnect = {
         	print("[Client.WebSocketManager] WebSocket is connected to \(self.url)")
+            loginFunction()
         }
 
         self.ws.onDisconnect = { (error: NSError?) in
         	print("[Client.WebSocketManager] Websocket is disconnected from \(self.url) with error: \(error?.localizedDescription)")
-            self.logoutFunction()
+            logoutFunction()
         }
                 
         self.ws.onText = { (request: String) in
             print("[Client.WebSocketManager] Client recieved a request : \(request)")
-			
+
             let command: ResponseResolver? = Mapper<ResponseResolver>().map(request)
             
             // Server has responded
@@ -48,6 +46,7 @@ class WebSocketManager {
                 if (response?.text == "welcome") {
                     let home: File? = response?.parameters!["home"]
                     self.navigationManager.setItems((home?.files)!)
+                    self.updateListView()
                 }
             }
             
@@ -74,6 +73,19 @@ class WebSocketManager {
         }
         
         self.ws.connect()
+    }
+    
+    func updateListView() {
+        // TODO: find a maybe better way to get StoreItSynchDirectoryView
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let mainNavigationController = appDelegate.window?.rootViewController as! UINavigationController
+        let tabBarController = mainNavigationController.viewControllers[1] as! UITabBarController
+        let navigationController = tabBarController.viewControllers![0] as! UINavigationController
+        let listView = navigationController.viewControllers[0] as! StoreItSynchDirectoryView
+
+        dispatch_async(dispatch_get_main_queue()) {
+            listView.list!.reloadData()
+        }
     }
     
     func sendRequest(request: String, completion: (() -> ())?) {

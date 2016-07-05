@@ -29,17 +29,20 @@ class ConnectionManager {
         oauth2?.onFailureOrAuthorizeAddEvents()
     }
     
+    func accessToken() -> String? {
+        return self.oauth2?.accessToken()
+    }
     
     func forgetTokens() {
-        oauth2?.forgetTokens()
+        self.oauth2?.forgetTokens()
     }
     
     func handleRedirectUrl(url: NSURL) {
-        oauth2?.handleRedirectUrl(url)
+        self.oauth2?.handleRedirectUrl(url)
     }
     
     func authorize(context: AnyObject) {
-        oauth2?.authorize(context)
+        self.oauth2?.authorize(context)
     }
     
 }

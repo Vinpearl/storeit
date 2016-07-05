@@ -33,7 +33,7 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.list.delegate = self
         self.list.dataSource = self
 
@@ -49,18 +49,6 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
         
         self.storeitActionSheet = StoreitActionSheet(title: "Choisissez une option", message: nil)
         self.addActionsToActionSheet()
-        
-        // TODO: show some loading in interface
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            while ((self.navigationManager?.items)! == []) {
-   				//print("Waiting data to reaload view...")
-                usleep(10)
-            }
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                self.list.reloadData()
-            }
-        }
     }
     
     // function triggered when back button of navigation bar is pressed
@@ -98,6 +86,7 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
             listView.connectionManager = self.connectionManager
             listView.fileManager = self.fileManager
             listView.navigationManager = self.navigationManager
+            listView.ipfsManager = self.ipfsManager
         }
         else if (segue.identifier == "showFileSegue") {
             let fileView = segue.destinationViewController as! FileView
@@ -154,7 +143,7 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
         self.dismissViewControllerAnimated(true, completion: {_ in
             let referenceUrl = editingInfo["UIImagePickerControllerReferenceURL"] as! NSURL
             let asset = PHAsset.fetchAssetsWithALAssetURLs([referenceUrl], options: nil).firstObject as! PHAsset
-            
+
             PHImageManager.defaultManager().requestImageDataForAsset(asset, options: PHImageRequestOptions(), resultHandler: {
                 (imagedata, dataUTI, orientation, info) in
                 if info!.keys.contains(NSString(string: "PHImageFileURLKey"))
@@ -169,7 +158,7 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
                             print("[IPFS.ADD] Error while IPFS ADD: \(error)")
                             return
                         }
-                        
+
                         // If ipfs add succeed
                         let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)!
                         let ipfsAddResponse = Mapper<IpfsAddResponse>().map(dataString)
@@ -177,7 +166,7 @@ class StoreItSynchDirectoryView:  UIViewController, UITableViewDelegate, UITable
                         
                         // TODO: handle error
 						let file = self.fileManager?.createFile(relativePath!, metadata: "", IPFSHash: ipfsAddResponse!.hash)
-                        
+ 
                         // add new file in tree after add request
                         self.networkManager?.fadd([file!]) { _ in
                             self.navigationManager?.insertFileObject(file!)

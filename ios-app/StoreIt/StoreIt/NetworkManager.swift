@@ -16,18 +16,22 @@ class NetworkManager {
     
     private let WSManager: WebSocketManager
     
-    init(host: String, port: Int, navigationManager: NavigationManager, logoutFunction: () -> Void) {
+    init(host: String, port: Int, navigationManager: NavigationManager) {
         self.host = host
         self.port = port
-        self.WSManager = WebSocketManager(host: host, port: port, navigationManager: navigationManager, logoutFunction: logoutFunction)
+        self.WSManager = WebSocketManager(host: host, port: port, navigationManager: navigationManager)
     }
     
     func close() {
-        WSManager.ws.disconnect()
+        self.WSManager.ws.disconnect()
     }
     
     func isConnected() -> Bool {
         return WSManager.ws.isConnected
+    }
+    
+    func initConnection(loginFunction: () -> Void, logoutFunction: () -> Void) {
+        self.WSManager.eventsInitializer(loginFunction, logoutFunction: logoutFunction)
     }
     
     func join(authType: String, accessToken: String, completion: (() -> ())?) {

@@ -6,7 +6,8 @@ export const ApiError = {
   UNKNOWNAUTHTYPE: {code: 3, msg: 'Unknown authentication method'},
   SERVERERROR: {code: 4, msg: 'The server failed'},
   BADTREE: {code: 5, msg: 'The tree does not match server reprensentation. Login again.'},
-  BADREQUEST: {code: 6, msg: 'The request is invalid'}
+  BADREQUEST: {code: 6, msg: 'The request structure is invalid'},
+  BADPARAMETERS: {code: 7, msg: 'The request parameters are invalid'}
 }
 
 export const errWithStack = (err) => {

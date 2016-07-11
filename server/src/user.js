@@ -73,6 +73,10 @@ export class User {
       return tree
     })
 
+    if (!takenTree) {
+      return api.errWithStack(api.ApiError.BADPARAMETERS)
+    }
+    
     if (takenTree.code) {
       return takenTree
     }

@@ -9,6 +9,7 @@ export const ApiError = {
   BADREQUEST: {code: 6, msg: 'The request structure is invalid'},
   BADPARAMETERS: {code: 7, msg: 'The request parameters are invalid'},
   UNKNOWNREQUEST: {code: 8, msg: 'The request is unknown'},
+  ENOENT: {code: 9, msg: 'No such file or directory'}
 }
 
 export const errWithStack = (err) => {

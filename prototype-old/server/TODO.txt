@@ -1,0 +1,4 @@
+ajouter un système de confirmation de la part du client
+ajouter une vérification au moment de JOIN que tous les hash sont hébergés quelque part
+si les fichiers n'ont pas été téléchargés et que le client est fermé, il faudra reprendre à la réouverture
+utiliser un objet hash plutôt qu'un string afin de le pretty printer automatiquement

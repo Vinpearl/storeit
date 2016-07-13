@@ -1,0 +1,28 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '8.0'
+# Uncomment this line if you're using Swift
+use_frameworks!
+
+target 'StoreIt' do
+    pod 'ObjectMapper', '~> 1.1'
+    pod 'CryptoSwift'
+    pod 'Starscream', '~> 1.1.3'
+    pod 'p2.OAuth2', '~> 2.2'
+    pod "Plist"
+    pod 'FBSDKLoginKit', '~> 4.13'
+    pod 'FBSDKCoreKit', '~> 4.13'
+end
+
+target 'StoreItTests' do
+
+end
+
+target 'StoreItUITests' do
+
+end
+
+#post_install do |installer|
+ # installer.pods_project.build_configuration_list.build_configurations.each do |configuration|
+  #  configuration.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+  #end
+#end  

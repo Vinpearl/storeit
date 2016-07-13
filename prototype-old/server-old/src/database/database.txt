@@ -1,0 +1,15 @@
+[client]
+id: [PRIMARY KEY]
+username: [varchar(255)]
+passwd_hash: [varchar(255)]
+TODO: salt
+TODO: max user space
+file tree: [text]
+
+LATER: [existing_chunks]
+LATER: id: [PRIMARY KEY]
+LATER: hash: [varchar(255)]
+LATER: 
+LATER: [stored_chunks]
+LATER: client_id: [FOREIN_KEY]
+LATER: chunk_id: [FOREIN_KEY]

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Server"
+        android:key="pref_key_internet_settings">
+    <EditTextPreference android:title="Gateway url"
+        android:key="gateway_url"
+        android:summary="Please enter the ips gateway url"/>
+    <EditTextPreference android:title="Server url"
+        android:key="server_url"
+        android:summary="Please enter the storeit server adress"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Storage"
+        android:key="pref_key_storage_setting">
+        <ListPreference
+            android:key="pref_key_storage_location"
+            android:title="Storage location"
+            android:dialogTitle="available storages"
+            android:summary="Select the storeit storage location"
+            android:defaultValue="0"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

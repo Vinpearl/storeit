@@ -1,0 +1,129 @@
+%&pdflatex
+
+\documentclass{article}
+\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{pdfpages}
+
+\begin{document}
+  \title{StoreIt Protocol v0.3}
+  \author{Adrien Morel \texttt{adrien.morel@me.com}}
+  \date{\today}
+  \maketitle
+
+\section{Introduction}
+
+Hello, this is the documentation for the StoreIt protocol. It is used to communicate with our server. We will be implementing this protocol on top of WEBSOCKETS to enjoy its messaging model.\\
+\textbf{Everything should be encoded in ASCII.} Everything in the protocol is ether a \textit{command} or a \textit{numeric response}. A command will always have the following structure:\\
+\begin{center}
+\textbf{NAME} \textit{arg1 [arg2 arg3...]}
+\end{center}
+
+\begin{itemize}
+  \item NAME is the command name. "JOIN" for example. Every command name is ALWAYS 4 characters long.
+  \item \textit{arg} are command ASCII arguments.
+\end{itemize}
+\section{The JSON data structures}
+\subsection{File Object}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
+\begin{lstlisting}[language=json,firstnumber=1]
+{
+  "path": "storeit",
+  "metadata": "unimplemented for now",
+  "unique_hash": "IPFS hash of all the data in the file",
+  "kind": 0,
+  "files": {
+    "file_name": anotherFileObject,
+    "another_file_name": anotherFileObject
+  }
+}
+\end{lstlisting}
+
+\section{ASCII Commands}
+
+\subsection{Session}
+
+\paragraph{JOIN}
+
+This is the first request to make whenever a client wants to get online.\\
+\begin{center}JOIN gg/fb email token json\_file\end{center}
+
+  \begin{itemize}
+    \item gg/fb is for either facebook or google authentication of the client
+    \item email is the email the user identify itself with
+    \item token is a OAuth token that will be used to check that the user logged in
+    \item Json\_file is the json tree described in the second section.
+  \end{itemize}
+
+\paragraph{QUIT}
+
+A client should send this to our server to leave the network.\\
+
+\begin{center}QUIT\end{center}
+
+\subsection{File Management}
+
+The tree following commands can be sent either from the server or from the client, depending on who has to update the files. For example if you get "FDEL" from the server, it means that somebody deleted a file from another machine and you must delete this file locally to keep in sync.
+\paragraph{FDEL (file delete)}
+
+Delete a file/directory.\\
+
+\begin{center}FDEL file\_path\end{center}
+
+\paragraph{FADD (file add)}
+
+Add a file to the user tree.
+
+\begin{center}FADD json\_file\end{center}
+
+\paragraph{FUPT (file update)}
+
+Tell the server to update a file, or receive the order to update a file. Like FADD.
+
+\begin{center}FUPT json\_file\end{center}
+
+\section{Numeric responses}
+
+Just send '0 CMDNAME' if everything went well. Send '1 CMDNAME error\_message' if something wrong occured and you could not complete the command. For example :
+\begin{itemize}
+  \item 0 JOIN
+  \item 1 JOIN Bad credentials
+  \item 1 FADD No space left on user account
+\end{itemize}
+
+\end{document}

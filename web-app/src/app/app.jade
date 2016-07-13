@@ -1,0 +1,17 @@
+md-toolbar#header
+  img#logo(src="assets/images/logo.png")
+  //- md-autocomplete(
+  //-   md-selected-item="vm.selectedItem"
+  //-   md-search-text="vm.searchText"
+  //-   md-selected-item-change="vm.selectedItemChange(item)"
+  //-   md-items="item in vm.querySearch(vm.searchText)"
+  //-   md-item-text="item.display"
+  //-   md-min-length="0"
+  //-   placeholder="Search for files"
+  //- )
+  //-   md-item-template
+  //-    span(md-highlight-text="vm.searchText" md-highlight-flags="^i"){{item.display}}
+  //-   md-not-found
+  //-    | No states matching "{{vm.searchText}}" were found.
+
+ng-outlet#container(layout="column" flex)

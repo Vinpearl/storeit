@@ -1,0 +1,30 @@
+html, body {
+  background: #fff;
+}
+
+[ng-cloak] {
+  display: none;
+}
+
+#header {
+  background-color: #79B1C2;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#header #logo {
+  width: 220px;
+}
+
+.content {
+  padding-top: 20px;
+}
+
+#container file-explorer {
+  display:flex;
+  height: 100%;
+  flex-basis:0%;
+  flex-direction:column;
+  flex-grow:1;
+  flex-shrink:1;
+}

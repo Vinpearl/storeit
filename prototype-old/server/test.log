@@ -1,0 +1,35 @@
+DEBUG:asyncio:Using selector: KqueueSelector
+INFO:storeit:Serving on ('0.0.0.0', 7641)
+INFO:storeit:cli1 has joined on port 7643
+DEBUG:storeit:user cli1 adding ./storeit//hello_world.txt from client
+DEBUG:storeit:registering chunk 9e60e32bfee4d43e638cc505a161e35f9a999a47bdbe941b47a15a63db24e9e2 for cli1
+DEBUG:storeit:user cli1 has ('9e60...e9e2',)
+DEBUG:storeit:chk 9e60...e9e2 is owned by {'cli1'}
+WARNING:storeit:could not find any user to store 9e60...e9e2 (from cli1).Chunk currently has 1 hosted instances
+WARNING:storeit:could not find any user to store 9e60...e9e2 (from cli1).Chunk currently has 1 hosted instances
+DEBUG:storeit:tree has been processed for cli1
+DEBUG:storeit:cli1 has 1 chunks to register
+DEBUG:storeit:registering chunk 9e60e32bfee4d43e638cc505a161e35f9a999a47bdbe941b47a15a63db24e9e2 for cli1
+DEBUG:storeit:user cli1 has ('9e60...e9e2',)
+DEBUG:storeit:chk 9e60...e9e2 is owned by {'cli1'}
+WARNING:storeit:could not find any user to store 9e60...e9e2 (from cli1).Chunk currently has 1 hosted instances
+WARNING:storeit:could not find any user to store 9e60...e9e2 (from cli1).Chunk currently has 1 hosted instances
+INFO:storeit:cli2 has joined on port 7644
+DEBUG:storeit:user cli2 adding ./storeit//hello_world.txt from client
+DEBUG:storeit:registering chunk 9e60e32bfee4d43e638cc505a161e35f9a999a47bdbe941b47a15a63db24e9e2 for cli2
+DEBUG:storeit:user cli1 has ('9e60...e9e2',)
+DEBUG:storeit:user cli2 has ('9e60...e9e2',)
+DEBUG:storeit:chk 9e60...e9e2 is owned by {'cli1', 'cli2'}
+WARNING:storeit:could not find any user to store 9e60...e9e2 (from cli2).Chunk currently has 2 hosted instances
+DEBUG:storeit:tree has been processed for cli2
+DEBUG:storeit:cli2 has 1 chunks to register
+DEBUG:storeit:registering chunk 9e60e32bfee4d43e638cc505a161e35f9a999a47bdbe941b47a15a63db24e9e2 for cli2
+DEBUG:storeit:user cli1 has ('9e60...e9e2',)
+DEBUG:storeit:user cli2 has ('9e60...e9e2',)
+DEBUG:storeit:chk 9e60...e9e2 is owned by {'cli1', 'cli2'}
+WARNING:storeit:could not find any user to store 9e60...e9e2 (from cli2).Chunk currently has 2 hosted instances
+DEBUG:asyncio:Using selector: KqueueSelector
+DEBUG:asyncio:Using selector: KqueueSelector
+INFO:storeit:Serving on ('0.0.0.0', 7641)
+DEBUG:asyncio:Using selector: KqueueSelector
+INFO:storeit:Serving on ('0.0.0.0', 7641)
